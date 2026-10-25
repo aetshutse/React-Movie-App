@@ -4,7 +4,7 @@ A React app for browsing popular movies, searching TMDB, and saving favorites in
 
 ## Live demo
 
-[View the live app](https://react-movie-app-aetshutse.vercel.app)
+[View the live app](https://react-movie-app-phi-liart.vercel.app/)
 
 ## Features
 

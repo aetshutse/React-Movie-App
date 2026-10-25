@@ -97,9 +97,11 @@ The frontend and backend commands must run in separate terminals during developm
 
 ```text
 .
-├── public/                 Static public assets
+├── api/
+│   └── movies/             Vercel serverless API routes
 ├── server/
-│   └── index.js            Express API routes and TMDB requests
+│   ├── index.js            Local Express API server
+│   └── tmdb.js             Shared server-side TMDB requests
 ├── src/
 │   ├── assets/             App images and other imported assets
 │   ├── components/         Navigation bar and movie cards
@@ -113,12 +115,29 @@ The frontend and backend commands must run in separate terminals during developm
 ├── .env.local              Local TMDB key; ignored by Git
 ├── index.html              Vite HTML entry point
 ├── package.json            Dependencies and npm scripts
+├── vercel.json             Vercel SPA routing configuration
 └── vite.config.js          Vite configuration and development proxy
 ```
 
-## Deployment notes
+## Deploy to Vercel
 
-The Vite proxy in `vite.config.js` is for local development. A deployed version also needs a running backend with `TMDB_API_KEY` configured as a server-side environment variable, plus hosting or reverse-proxy routing that sends `/api` requests to that backend. The current backend does not include rate limiting or caching, so add those before exposing it to significant public traffic. Do not deploy the real key in frontend environment variables or static files.
+The repository is configured for a single Vercel project: Vercel builds the Vite frontend as static files and deploys the two files in `api/movies/` as serverless functions. The Vercel API functions and the local Express server share the TMDB request helper in `server/tmdb.js`. `vercel.json` sends client-side routes such as `/favorites` back to the React app. The Vite proxy in `vite.config.js` is only for local development.
+
+1. Push this repository to GitHub.
+2. In the [Vercel dashboard](https://vercel.com/dashboard), choose **Add New → Project**, then import `aetshutse/React-Movie-App`.
+3. Keep the project root as the **Root Directory**. Vercel should detect Vite. Use these build settings if it asks:
+   - **Build command:** `npm run build`
+   - **Output directory:** `dist`
+   - **Install command:** `npm install`
+4. In the project’s **Environment Variables** settings, add `TMDB_API_KEY` with your TMDB **API Key (v3 auth)**. Add it to the Production environment (and Preview if you want preview deployments to load movies). Do not add a `VITE_` prefix.
+5. Deploy. After adding or changing an environment variable, redeploy for the change to take effect.
+6. Test the deployed site at `/` and `/favorites`, and check these API routes:
+   - `/api/movies/popular`
+   - `/api/movies/search?query=Inception`
+
+Favorites remain in each visitor's browser `localStorage`; they are not shared between devices or browsers. The API key is read only by server-side code. The API does not currently include rate limiting or caching, so consider adding those before exposing it to significant public traffic.
+
+See Vercel's guides for [Vite](https://vercel.com/docs/frameworks/frontend/vite) and [Node.js functions](https://vercel.com/docs/functions/runtimes/node-js) for platform details.
 
 ## Troubleshooting
 

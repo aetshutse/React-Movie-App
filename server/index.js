@@ -1,4 +1,6 @@
 import express from "express";
+import process from "node:process";
+import { getMovies } from "./tmdb.js";
 
 const app = express();
 const port = Number(process.env.PORT || 3001);
@@ -7,24 +9,6 @@ const apiKey = process.env.TMDB_API_KEY;
 if (!apiKey) {
   console.error("TMDB_API_KEY is missing from .env.local.");
   process.exit(1);
-}
-
-async function getMovies(path, query) {
-  const url = new URL(`https://api.themoviedb.org/3${path}`);
-  url.searchParams.set("api_key", apiKey);
-
-  if (query) {
-    url.searchParams.set("query", query);
-  }
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("TMDB request failed.");
-  }
-
-  const data = await response.json();
-  return data.results ?? [];
 }
 
 app.get("/api/movies/popular", async (_request, response) => {

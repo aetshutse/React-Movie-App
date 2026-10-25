@@ -45,6 +45,15 @@ function Home() {
 
   return (
     <div className="home">
+      <header className="home-intro">
+        <p className="home-eyebrow">YOUR NEXT GREAT WATCH</p>
+        <h1>
+          Stories worth <span>staying in for.</span>
+        </h1>
+        <p className="home-description">
+          Find a new favorite, revisit a classic, and keep your watchlist close.
+        </p>
+      </header>
       <form onSubmit={handleSearch} className="search-form">
         <input
           type="text"
@@ -52,6 +61,7 @@ function Home() {
           className="search-input"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Search movies"
         />
         <button type="submit" className="search-button">
           Search

@@ -2,6 +2,10 @@
 
 A React app for browsing popular movies, searching TMDB, and saving favorites in your browser. The app has a Vite-powered React frontend and a small Express backend that makes requests to TMDB without putting the API key in browser code.
 
+## Live demo
+
+[View the live app](https://react-movie-app-aetshutse.vercel.app)
+
 ## Features
 
 - Browse popular movies and search TMDB by title.
